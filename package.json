@@ -9,9 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/css": "^11.9.0",
+    "@emotion/server": "^11.4.0",
+    "@nextui-org/react": "^1.0.0-beta.9",
+    "konva": "^8.3.9",
     "next": "12.1.6",
+    "rambda": "^7.1.4",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-konva": "^18.1.1",
+    "react-sizeme": "^3.0.2"
   },
   "devDependencies": {
     "@types/node": "17.0.41",
