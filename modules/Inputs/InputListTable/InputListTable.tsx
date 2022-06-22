@@ -12,7 +12,7 @@ const columns = [
 
 export const InputListTable: React.FC = () => {
   const inputList = useInputStore(state => state.inputList);
-  console.log({ inputList })
+
   return (
     <div>
       <Table

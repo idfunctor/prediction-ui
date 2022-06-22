@@ -56,7 +56,7 @@ export function InputUploader() {
           </button>
           <UploadedItems items={imageList} />
           <div className={clearButtonWrapper}>
-            {Boolean(inputList.length) && <Button color="error" size="xs" onClick={clearInputs}>Delete All Inputs</Button>}
+            {Boolean(inputList.length) && <Button color="error" size="xs" onClick={clearInputs}>Delete All Images</Button>}
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import { IconButton } from "components/IconButton/IconButton"
 import { PencilIcon } from "components/Icons/PencilIcon"
 import { TrashIcon } from "components/Icons/TrashIcon"
 import { useInputStore } from "modules/Main/stores"
+import { CreatePrediction } from "modules/Predictions/CreatePrediction"
 import { formatBytes } from "utils/date"
 import { Input } from "utils/types"
 
@@ -39,7 +40,7 @@ export const renderCell = (input: Input, columnKey: InputTableKeys) => {
     case "actions":
       return (
         <Row className={actions} align="center" justify="flex-end">
-          <Button color="secondary" size="xs">PREDICT</Button>
+          <CreatePrediction input={input} />
           <DeleteInput input={input} />
         </Row>
       )

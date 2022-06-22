@@ -1,4 +1,4 @@
-import { Tab as AriaTab, TabList, TabPanel, useTabState } from "ariakit/tab";
+import { Tab as AriaTab, TabList, TabPanel, useTabState } from "reakit/Tab";
 import { Wrapper } from './style';
 
 type TabItem = {
@@ -14,13 +14,13 @@ export function Tab({ tabs, label, defaultSelectedId, children, actions = null }
   defaultSelectedId?: string
   actions?: React.ReactNode,
 }>) {
-  const tabState = useTabState({ defaultSelectedId });
+  const tabState = useTabState({ selectedId: defaultSelectedId });
   return (
     <div className={Wrapper}>
       <div className="header">
-        <TabList state={tabState} className="tab-list" aria-label={label}>
+        <TabList {...tabState} className="tab-list" aria-label={label}>
           {tabs.map(tab => (
-            <AriaTab key={tab.id} className="tab" id={tab.id}>
+            <AriaTab {...tabState} key={tab.id} className="tab" id={tab.id}>
               {tab.title}
             </AriaTab>
           ))}
@@ -30,7 +30,7 @@ export function Tab({ tabs, label, defaultSelectedId, children, actions = null }
         </div>
       </div>
       {tabs.map(tab => (
-        <TabPanel key={tab.id} state={tabState} tabId={tab.id}>
+        <TabPanel key={tab.id} {...tabState} tabId={tab.id}>
           {tab.content}
         </TabPanel>
       ))}
