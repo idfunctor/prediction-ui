@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/react";
 import { useInputStore } from "modules/Main/stores";
 import { useEffect, useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
-import { generateInputId } from '../helpers';
+import { generateId } from 'utils/general';
 import { uploadedItemList, clearButtonWrapper, dropzone } from "./styles";
 
 
@@ -21,7 +21,7 @@ export function InputUploader() {
         // (in a real project I'd show an error toast to the user if 0 valid files)
         (i) => Boolean(i.dataURL) && Boolean(i.file) && Boolean(i.file?.size)
       ).map(item => ({
-        id: generateInputId(),
+        id: generateId(),
         src: item.dataURL as string,
         name: item.file?.name as string,
         size: item.file?.size as number,

@@ -1,4 +1,4 @@
-import { generateInputId } from 'modules/Inputs/helpers';
+import { generateId } from 'utils/general';
 import type { PredictionPayload } from 'modules/Predictions/CreatePrediction'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -25,9 +25,10 @@ export default async function handler(
 
 function makeMockResponse({ title, description }: { title: string; description: string; }) {
   return {
-    id: generateInputId(),
+    id: generateId(),
     title,
     description,
+    createdAt: new Date().toISOString(),
     "predict": {
       "description": "Detected objects",
       "predictions": [

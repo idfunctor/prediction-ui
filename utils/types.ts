@@ -2,7 +2,7 @@
  on a real project I would store types in their respective modules
 */
 
-export interface Input {
+export interface TIInput {
   id: string;
   src: string;
   name: string;
@@ -16,14 +16,15 @@ export interface PredictResponse {
   id: string;
   title: string;
   description: string;
+  createdAt: string;
 }
 
 export interface Predict {
   description: string;
   error?: boolean;
-  predictions?: (PredictionsEntity)[] | null;
+  predictions?: (PredictionEntity)[] | null;
 }
-export interface PredictionsEntity {
+export interface PredictionEntity {
   bbox: Bbox;
   label: string;
   score: string;
@@ -35,4 +36,4 @@ export interface Bbox {
   y2: number;
 }
 
-export interface Prediction extends PredictResponse {}
+export interface TIPrediction extends PredictResponse {}
