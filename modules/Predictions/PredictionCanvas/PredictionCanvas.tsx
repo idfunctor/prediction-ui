@@ -63,7 +63,7 @@ function convertViewItemsToRectConfig(list: PredictionEntity[]): RectConfig[] {
           color,
           key: generateId(),
           fill: rgba(color, 0.125),
-          text: `${label} ${score}`,
+          text: `${label} (${(Number(score) * 100).toFixed(0)})%`,
         };
       }
       return null;
