@@ -1,22 +1,24 @@
-import { Input, Prediction } from 'utils/types'
+import { TIInput, TIPrediction } from 'utils/types'
 import create from 'zustand';
 
 export const useInputStore = create<{
-  inputList: Input[];
-  addInputs: (inputs: Input[]) => void;
+  inputList: TIInput[];
+  addInputs: (inputs: TIInput[]) => void;
   clearInputs: () => void;
   deleteInput: (id: string) => void;
 }>((set) => ({
   inputList: [],
-  addInputs: (inputs: Input[]) => set((state) => ({ inputList: state.inputList.concat(inputs) })),
+  addInputs: (inputs: TIInput[]) => set((state) => ({ inputList: state.inputList.concat(inputs) })),
   clearInputs: () => set(() => ({ inputList: [] })),
   deleteInput: (id: string) => set((state) => ({ inputList: state.inputList.filter(i => i.id !== id) })),
 }))
 
 export const usePredictionStore = create<{
-  predictionList: Prediction[],
-  addPredictions: (inputs: Prediction[]) => void;
+  predictionList: TIPrediction[],
+  addPredictions: (inputs: TIPrediction[]) => void;
+  deletePrediction: (id: string) => void;
 }>((set) => ({
   predictionList: [],
-  addPredictions: (predictions: Prediction[]) => set((state) => ({ predictionList: state.predictionList.concat(predictions) })),
+  deletePrediction: (id: string) => set((state) => ({ predictionList: state.predictionList.filter(i => i.id !== id) })),
+  addPredictions: (predictions: TIPrediction[]) => set((state) => ({ predictionList: state.predictionList.concat(predictions) })),
 }))

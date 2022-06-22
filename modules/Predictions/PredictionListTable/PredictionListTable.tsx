@@ -1,20 +1,21 @@
+
 import { Card, Table } from '@nextui-org/react';
-import { useInputStore } from 'modules/Main/stores';
+import { usePredictionStore } from 'modules/Main/stores';
 
 import { InputTableKeys, renderCell } from './helpers';
 
 const columns = [
-  { name: "NAME", uid: "name" },
-  { name: "SIZE", uid: "size" },
+  { name: "TITLE", uid: "name" },
+  { name: "DESCRIPTION", uid: "size" },
   { name: "TIME", uid: "time" },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export const InputListTable: React.FC = () => {
-  const inputList = useInputStore(state => state.inputList)
+export const PredictionListTable: React.FC = () => {
+  const predList = usePredictionStore(state => state.predictionList)
 
-  if (!inputList.length) {
-    return <Card variant="flat" style={{ padding: '2rem 4rem' }}> Please upload images using the Manage Images button above. </Card>
+  if (!predList.length) {
+    return <Card variant="flat" style={{ padding: '2rem 4rem' }}> Please create predictions from the Images tab to view them here. </Card>
   }
 
   return (
@@ -38,7 +39,7 @@ export const InputListTable: React.FC = () => {
             </Table.Column>
           )}
         </Table.Header>
-        <Table.Body items={inputList}>
+        <Table.Body items={predList}>
           {(item) => (
             <Table.Row>
               {(columnKey) => (

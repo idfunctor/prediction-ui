@@ -2,10 +2,9 @@ import { css } from "@emotion/css"
 import { Row, Tooltip, Text } from "@nextui-org/react"
 import { IconButton } from "components/IconButton/IconButton"
 import { TrashIcon } from "components/Icons/TrashIcon"
-import { useInputStore } from "modules/Main/stores"
-import { CreatePrediction } from "modules/Predictions/CreatePrediction"
-import { formatBytes } from "utils/date"
-import { TIInput } from "utils/types"
+import { usePredictionStore } from "modules/Main/stores"
+import { TIPrediction } from "utils/types"
+import { ViewPrediction } from "../ViewPrediction"
 
 const actions = css`
   button, div[role="button"] {
@@ -15,32 +14,32 @@ const actions = css`
 
 export type InputTableKeys = 'name' | 'size' | 'time' | 'actions';
 
-export const renderCell = (input: TIInput, columnKey: InputTableKeys) => {
+export const renderCell = (prediction: TIPrediction, columnKey: InputTableKeys) => {
   switch (columnKey) {
     case "name":
       return (
         <Text b size={14} css={{ tt: "capitalize" }}>
-          {input.name}
+          {prediction.title}
         </Text>
       )
     case "size":
       return (
         <Text b size={13} css={{ tt: "capitalize", color: "$accents7" }}>
-          {formatBytes(input.size)}
+          {prediction.description}
         </Text>
       )
     case "time":
       return (
         <Text b size={13} css={{ tt: "capitalize", color: "$accents7" }}>
-          {new Date(input.createdAt).toLocaleString()}
+          {new Date(prediction.createdAt).toLocaleString()}
         </Text>
       )
 
     case "actions":
       return (
         <Row className={actions} align="center" justify="flex-end">
-          <CreatePrediction input={input} />
-          <DeleteInput input={input} />
+          <ViewPrediction prediction={prediction} />
+          <DeletePrediction prediction={prediction} />
         </Row>
       )
     default:
@@ -49,14 +48,14 @@ export const renderCell = (input: TIInput, columnKey: InputTableKeys) => {
 }
 
 // would move this to its own component like "TableActionButton" that takes any icon if time permitted
-function DeleteInput({ input }: { input: TIInput }) {
-  const deleteInput = useInputStore(s => s.deleteInput);
+function DeletePrediction({ prediction }: { prediction: TIPrediction }) {
+  const deletePred = usePredictionStore(s => s.deletePrediction);
 
   return (
     <Tooltip
-      content="Delete Input"
+      content="Delete Prediction"
       color="error"
-      onClick={() => deleteInput(input.id)}
+      onClick={() => deletePred(prediction.id)}
     >
       <IconButton>
         <TrashIcon size={20} fill="#FF0080" />
