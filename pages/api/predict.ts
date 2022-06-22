@@ -4,13 +4,14 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = object
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   // dummy code to send success for the Orange image and error for everything else
   const body = JSON.parse(req.body) as PredictionPayload;
   if (body.input.name.includes('img_1')) {
+    await sleep(800)
     res.status(200).json({ ...makeMockResponse(body), input: body.input })
   } else {
     res.status(500).json({
@@ -63,4 +64,8 @@ function makeMockResponse({ title, description }: { title: string; description: 
       ]
     }
   }
+}
+
+function sleep(ms: number): Promise<string> {
+  return new Promise((resolve) => setTimeout(() => resolve('hey'), ms));
 }

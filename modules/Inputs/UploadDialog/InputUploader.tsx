@@ -34,14 +34,15 @@ export function InputUploader() {
   return (
     <ImageUploading
       multiple
-      value={[]}
+      value={uploaderValue}
       onChange={changeHandler}
     >
       {({
         onImageUpload,
         imageList,
         isDragging,
-        dragProps
+        dragProps,
+        onImageRemoveAll,
       }) => (
         <div className="upload__image-wrapper">
           <button
@@ -56,7 +57,7 @@ export function InputUploader() {
           </button>
           <UploadedItems items={imageList} />
           <div className={clearButtonWrapper}>
-            {Boolean(inputList.length) && <Button color="error" size="xs" onClick={clearInputs}>Delete All Images</Button>}
+            {Boolean(inputList.length) && <Button color="error" size="xs" onClick={() => { clearInputs(); onImageRemoveAll(); }}>Delete All Images</Button>}
           </div>
         </div>
       )}

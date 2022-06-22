@@ -1,15 +1,17 @@
 import { Button, Input, Loading, Modal, Text } from "@nextui-org/react";
-import { IAsyncStatus, IUseAsyncActions, useAsync, useUnmountEffect } from "@react-hookz/web";
+import { useAsync, useUnmountEffect } from "@react-hookz/web";
+import { useHomeTabState } from "modules/Main/HomeTabs";
 import { usePredictionStore } from "modules/Main/stores";
 import { useCreatePredStore } from "modules/Predictions/stores";
 import { useCallback, useState } from "react";
+import toast from "react-hot-toast";
 import type { Input as TInput, PredictResponse } from "utils/types";
 
 /*
  I would create a reusable Dialog component on a real project given that CreatePrediction and Input uploader share almost all the code as is except the body and actions
  */
 export const CreatePrediction = ({ input }: { input: TInput }) => {
-  const { toggle, setData } = useCreatePredStore(state => ({ toggle: state.toggle, setData: state.setData }));
+  const { open, setData } = useCreatePredStore(state => ({ open: state.open, setData: state.setData }));
 
   return (
     <Button
@@ -17,7 +19,7 @@ export const CreatePrediction = ({ input }: { input: TInput }) => {
       size="xs"
       onPress={() => {
         setData({ currentInput: input })
-        toggle()
+        open()
       }}
     >
       PREDICT
@@ -29,20 +31,29 @@ export function PredictionModal() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const { toggle, setData } = useCreatePredStore(state => ({ toggle: state.toggle, setData: state.setData }));
+  const { close, setData } = useCreatePredStore(state => ({ close: state.close, setData: state.setData }));
   const { isOpen, currentInput } = useCreatePredStore(state => ({ isOpen: state.isOpen, currentInput: state.data.currentInput }));
 
   const [{ status }, actions] = useSubmit();
-
+  const homeTabState = useHomeTabState();
   const addPredictions = usePredictionStore(state => state.addPredictions);
-  const predictionList = usePredictionStore(state => state.predictionList);
+  // const predictionList = usePredictionStore(state => state.predictionList);
+
   const submitHandler = useCallback(async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (currentInput) {
       const data = await actions.execute({ title, description, input: currentInput })
-      addPredictions((data?.predict.error || !data) ? [] : [data])
+      const hasErrored = data.predict.error;
+      toast[hasErrored ? 'error' : 'success'](data.predict.description as string);
+      addPredictions((data.predict.error || !data) ? [] : [data])
+
+      if (!data.predict.error) {
+        homeTabState.setSelectedId('predictions')
+      }
+
+      close()
     }
-  }, [title, description, actions, currentInput, addPredictions]);
+  }, [title, description, actions, currentInput, addPredictions, homeTabState, close]);
 
 
 
@@ -55,7 +66,7 @@ export function PredictionModal() {
       blur
       aria-labelledby="modal-title"
       open={isOpen}
-      onClose={toggle}
+      onClose={close}
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
@@ -86,7 +97,7 @@ export function PredictionModal() {
         <Modal.Footer>
           {
             status === "loading" ? <Loading /> : <>
-              <Button type="button" size="sm" auto flat color="error" onClick={toggle}>
+              <Button type="button" size="sm" auto flat color="error" onClick={close}>
                 Cancel
               </Button>
               <Button type="submit" auto size="sm">
@@ -106,11 +117,7 @@ export type PredictionPayload = {
   input: Pick<TInput, 'id' | 'name'>;
 }
 
-function useSubmit(): [{
-  status: IAsyncStatus;
-  error: Error | undefined;
-  result: PredictResponse | undefined;
-}, IUseAsyncActions<PredictResponse | undefined, [PredictionPayload]>] {
+function useSubmit() {
   const [state, actions] = useAsync(
     async ({
       title,
@@ -126,11 +133,15 @@ function useSubmit(): [{
         const json: PredictResponse = await response.json();
         return json;
       } catch (e) {
-        // todo: TOAST to user
-        console.log(e);
+        return ({
+          predict: {
+            error: true,
+            description: 'Something went wrong, please contact support.',
+          }
+        } as PredictResponse);
       }
     },
   );
 
-  return [state, actions];
+  return [state, actions] as [typeof state, typeof actions];
 }
