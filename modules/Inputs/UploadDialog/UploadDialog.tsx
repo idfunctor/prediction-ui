@@ -1,28 +1,26 @@
-import { Button, Modal, Text } from "@nextui-org/react";
+import { Button, Input, Modal, Text } from "@nextui-org/react";
 import { PencilIcon } from "components/Icons/PencilIcon";
 import { useState } from "react";
 import { InputUploader } from "./InputUploader";
 
 export function UploadDialog() {
   const [visible, setVisible] = useState(false);
-  const handler = () => setVisible(true);
-  const closeHandler = () => {
-    setVisible(false);
-  };
+  const openModal = () => setVisible(true);
+  const closeModal = () => setVisible(false);
 
   return (
     <>
-      <Button size="md" icon={<PencilIcon size={18} fill="#fff" />} onClick={handler}> Manage Inputs </Button>
+      <Button size="md" icon={<PencilIcon size={18} fill="#fff" />} onClick={openModal}> Manage Images </Button>
       <Modal
         closeButton
         blur
         aria-labelledby="modal-title"
         open={visible}
-        onClose={closeHandler}
+        onClose={closeModal}
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            Upload Inputs
+            Upload Images
           </Text>
         </Modal.Header>
         <Modal.Body>
@@ -32,7 +30,7 @@ export function UploadDialog() {
           {/* <Button auto flat color="error" onClick={closeHandler}>
             Close
           </Button> */}
-          <Button auto size="sm" onClick={closeHandler}>
+          <Button auto size="sm" onClick={closeModal}>
             Done
           </Button>
         </Modal.Footer>
