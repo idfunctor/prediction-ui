@@ -49,6 +49,10 @@ interface RectConfig {
   text?: string;
 }
 
+/**
+ * If time had permitted, I would actually make sure that the bounding boxes do not exceed the image
+ * i.e. clip them so that they don't exceed image bounds.
+ */
 function convertViewItemsToRectConfig(list: PredictionEntity[]): RectConfig[] {
   return list
     .map((item) => {
